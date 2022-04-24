@@ -23,12 +23,19 @@ var (
 	}, []string{"id", "name"})
 )
 
-var clientID string
+var (
+	clientID    string
+	hueBridgeIP string
+)
 
 func main() {
 	clientID = os.Getenv("HUE_CLIENT_ID")
 	if clientID == "" {
-		log.Fatalf("HUE_CLIENT_ID is missing")
+		log.Fatalf("HUE_CLIENT_ID not set, but is required.")
+	}
+	hueBridgeIP = os.Getenv("HUE_BRIDGE_IP")
+	if hueBridgeIP == "" {
+		log.Fatalf("HUE_BRIDGE_IP not set, but is required.")
 	}
 	transport := http.DefaultTransport.(*http.Transport).Clone()
 	transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
@@ -65,7 +72,7 @@ func retrieveMiddleware(next http.Handler) http.Handler {
 
 func RetrieveLightStatuses() ([]Light, error) {
 	log.Println("Retrieving light statuses!")
-	req, err := http.NewRequest(http.MethodGet, "https://192.168.1.200/clip/v2/resource/light", nil)
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://%s/clip/v2/resource/light", hueBridgeIP), nil)
 	if err != nil {
 		return nil, fmt.Errorf("new request err: %w", err)
 	}
