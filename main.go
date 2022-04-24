@@ -41,7 +41,7 @@ func main() {
 	transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	http.DefaultClient.Transport = transport
 
-	http.Handle("/", retrieveMiddleware(promhttp.Handler()))
+	http.Handle("/metrics", retrieveMiddleware(promhttp.Handler()))
 	log.Println("Listening on :9000")
 	err := http.ListenAndServe(":9000", nil)
 	if err != nil {
