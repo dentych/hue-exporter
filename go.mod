@@ -1,4 +1,4 @@
-module github.com/dentych/hue-monitor
+module github.com/dentych/hue-exporter
 
 go 1.18
 
