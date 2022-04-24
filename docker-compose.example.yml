@@ -1,0 +1,15 @@
+version: "3.6"
+
+services:
+  hue-exporter:
+    build: ./
+    environment:
+      HUE_BRIDGE_IP: "127.0.0.1"
+      HUE_CLIENT_ID: "clientID"
+    restart: always
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    external: true
